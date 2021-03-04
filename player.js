@@ -1,15 +1,15 @@
 /** Handles playing the audible clicks of the metronome. */
 class Player {
-  constructor(rhythm) {
-    this.rhythm = rhythm;
+  constructor(metronome) {
+    this.metronome = metronome;
     this.duration = 0.02;
     this.beat = -1;
   }
 
   start() {
-    console.log('Start! ' + this.rhythm.toString());
+    console.log('Start! ' + this.metronome.rhythm.toString());
     this.tick();
-    this.interval = window.setInterval(this.tick.bind(this), (60 / this.rhythm.bpm) * 1000);
+    this.interval = window.setInterval(this.tick.bind(this), (60 / this.metronome.rhythm.bpm) * 1000);
   }
 
   stop() {
@@ -21,7 +21,7 @@ class Player {
 
   tick() {
     console.log('tick!');
-    this.beat = (this.beat + 1) % this.rhythm.count;
+    this.beat = (this.beat + 1) % this.metronome.rhythm.count;
 
     const oscillator = this.context.createOscillator();
     oscillator.type = 'triangle';
