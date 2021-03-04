@@ -1,0 +1,9 @@
+body > * {
+  vertical-align: middle;
+  margin: 5px;
+}
+
+.time-signature {
+  display: inline-grid;
+  grid: auto / auto;
+}

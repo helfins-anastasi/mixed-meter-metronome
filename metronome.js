@@ -6,7 +6,8 @@ class Metronome {
 
     this.startButton.onclick = this.start.bind(this);
     this.stopButton.onclick = this.stop.bind(this);
-    this.countInput.onchange = this.updateCount.bind(this);
+    this.timeTopInput.onchange = this.updateTimeSignature.bind(this);
+    this.timeBottomInput.onchange = this.updateTimeSignature.bind(this);
   }
 
   start() {
@@ -23,19 +24,28 @@ class Metronome {
     this.player.stop();
   }
 
-  updateCount() {
+  updateTimeSignature() {
     // Remove non-numeric characters.
-    this.countInput.value = this.countInput.value.replace(/[^0-9]/g, '');
-    if (!this.countInput.value) {
-      this.countInput.value = this.rhythm.count;
+    this.timeTopInput.value = this.timeTopInput.value.replace(/[^0-9]/g, '');
+    if (this.timeTopInput.value == 0) {  // Yes this is intentionally == not ===
+      this.timeTopInput.value = this.rhythm.count;
     } else {
-      this.rhythm.count = this.countInput.value;
+      this.rhythm.count = this.timeTopInput.value;
+    }
+
+    const unit = this.timeBottomInput.value;
+    // Only a few powers of two are valid units.
+    if (unit == 2 || unit == 4 || unit == 8 || unit == 16) {
+      this.rhythm.unit = unit;
+    } else {
+      this.timeBottomInput.value = this.rhythm.unit;
     }
   }
 
   get startButton() { return document.getElementById('start'); }
   get stopButton() { return document.getElementById('stop'); }
-  get countInput() { return document.getElementById('count'); }
+  get timeTopInput() { return document.getElementById('time-top'); }
+  get timeBottomInput() { return document.getElementById('time-bottom'); }
 }
 
 window.metronome = new Metronome();
