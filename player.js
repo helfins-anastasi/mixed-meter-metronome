@@ -9,7 +9,7 @@ class Player {
   start() {
     console.log('Start! ' + this.metronome.rhythm.toString());
     this.tick();
-    this.interval = window.setInterval(this.tick.bind(this), (60 / this.metronome.rhythm.bpm) * 1000);
+    this.interval = window.setInterval(this.tick.bind(this), this.metronome.rhythm.tickInterval);
   }
 
   stop() {
@@ -21,7 +21,7 @@ class Player {
 
   tick() {
     console.log('tick!');
-    this.beat = (this.beat + 1) % this.metronome.rhythm.count;
+    this.beat = (this.beat + 1) % this.metronome.rhythm.timeSignature.top;
 
     const oscillator = this.context.createOscillator();
     oscillator.type = 'triangle';
@@ -36,5 +36,5 @@ class Player {
     // TODO: this has different names in different browsers. Determine which is present and construct one of those
     if (!this.context_) this.context_ = new AudioContext();
     return this.context_;
-  }  
+  }
 }

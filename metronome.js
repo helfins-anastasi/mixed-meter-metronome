@@ -28,17 +28,17 @@ class Metronome {
     // Remove non-numeric characters.
     this.timeTopInput.value = this.timeTopInput.value.replace(/[^0-9]/g, '');
     if (this.timeTopInput.value == 0) {  // Yes this is intentionally == not ===
-      this.timeTopInput.value = this.rhythm.count;
+      this.timeTopInput.value = this.rhythm.timeSignature.top;
     } else {
-      this.rhythm.count = this.timeTopInput.value;
+      this.rhythm.timeSignature.top = this.timeTopInput.value;
     }
 
-    const unit = this.timeBottomInput.value;
+    const bottom = this.timeBottomInput.value;
     // Only a few powers of two are valid units.
-    if (unit == 2 || unit == 4 || unit == 8 || unit == 16) {
-      this.rhythm.unit = unit;
+    if (bottom == 2 || bottom == 4 || bottom == 8 || bottom == 16) {
+      this.rhythm.timeSignature.bottom = bottom;
     } else {
-      this.timeBottomInput.value = this.rhythm.unit;
+      this.timeBottomInput.value = this.rhythm.timeSignature.bottom;
     }
   }
 
