@@ -20,7 +20,7 @@ class Player {
   }
 
   tempoChanged(rhythmIndex) {
-    if (rhythmIndex === this.currentRhythm) updateInterval();
+    if (rhythmIndex === this.currentRhythm) this.updateInterval();
   }
 
   tick() {
