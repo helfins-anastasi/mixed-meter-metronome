@@ -9,7 +9,7 @@ class Player {
   start() {
     console.log('Start! ' + this.rhythm.toString());
     this.tick();
-    this.interval = window.setInterval(this.tick.bind(this), this.rhythm.tickInterval);
+    this.updateInterval();
   }
 
   stop() {
@@ -36,8 +36,14 @@ class Player {
     oscillator.stop(this.context.currentTime + this.duration);
   }
 
+  updateInterval() {
+    if (this.interval) window.clearInterval(this.interval);
+    this.interval = window.setInterval(this.tick.bind(this), this.rhythm.tickInterval);
+  }
+
   get context() {
-    // TODO: this has different names in different browsers. Determine which is present and construct one of those
+    // TODO: This has different names in different browsers.
+    // Determine which is present and construct one of those.
     if (!this.context_) this.context_ = new AudioContext();
     return this.context_;
   }
