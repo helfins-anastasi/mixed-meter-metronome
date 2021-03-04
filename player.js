@@ -4,31 +4,42 @@ class Player {
     this.metronome = metronome;
     this.duration = 0.02;
     this.currentTick = -1;
+    this.currentRhythm = 0;
   }
 
   start() {
-    console.log('Start! ' + this.rhythm.toString());
+    console.log('Start ' + this.rhythm.toString());
     this.tick();
     this.updateInterval();
   }
 
   stop() {
-    console.log('Stop!');
     if (this.interval) window.clearInterval(this.interval);
     this.interval = null;
     this.currentTick = -1;
   }
 
+  tempoChanged(rhythmIndex) {
+    if (rhythmIndex === this.currentRhythm) updateInterval();
+  }
+
   tick() {
-    console.log('tick!');
-    this.currentTick = (this.currentTick + 1) % this.rhythm.ticksPerMeasure;
+    this.currentTick = this.currentTick + 1;
+    if (this.currentTick == this.rhythm.ticksPerMeasure) {
+      this.currentRhythm = (this.currentRhythm + 1) % this.metronome.rhythms.length;
+      this.updateInterval();
+      console.log('current rhythm: ' + this.currentRhythm);
+      console.log('ticks per measure: ' + this.rhythm.ticksPerMeasure);
+      this.currentTick = 0;
+    }
+    console.log('current tick: ' + this.currentTick);
 
     const oscillator = this.context.createOscillator();
     oscillator.type = 'triangle';
 
     const strength = this.rhythm.getStrengthForTick(this.currentTick);
-    if (strength === "downbeat") oscillator.frequency.value = 2500;
-    else if (strength === "beat") oscillator.frequency.value = 2000;
+    if (strength === 'downbeat') oscillator.frequency.value = 2500;
+    else if (strength === 'beat') oscillator.frequency.value = 2000;
     else oscillator.frequency.value = 1500;
 
     oscillator.connect(this.context.destination);
@@ -47,5 +58,5 @@ class Player {
     if (!this.context_) this.context_ = new AudioContext();
     return this.context_;
   }
-  get rhythm() { return this.metronome.rhythms[0]; }
+  get rhythm() { return this.metronome.rhythms[this.currentRhythm]; }
 }

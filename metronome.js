@@ -1,7 +1,7 @@
 /** Top-level class. Handles I/O-type things and coordination. */
 class Metronome {
   constructor() {
-    this.rhythms = [new Rhythm(this, this.addRhythmButton)];
+    this.rhythms = [new Rhythm(this, 0, this.addRhythmButton)];
     this.player = new Player(this);
 
     this.addRhythmButton.onclick = this.addRhythm.bind(this);
@@ -10,7 +10,7 @@ class Metronome {
   }
 
   addRhythm() {
-    this.rhythms.push(new Rhythm(this, this.addRhythmButton));
+    this.rhythms.push(new Rhythm(this, this.rhythms.length, this.addRhythmButton));
   }
 
   start() {
@@ -27,8 +27,8 @@ class Metronome {
     this.player.stop();
   }
 
-  tempoChanged() {
-    this.player.updateInterval();
+  tempoChanged(rhythmIndex) {
+    this.player.tempoChanged(rhythmIndex);
   }
 
   get addRhythmButton() { return document.getElementById('add-rhythm'); }

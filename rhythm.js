@@ -1,11 +1,13 @@
 class Rhythm {
-  constructor(metronome, nextElement) {
+  constructor(metronome, indexInList, nextElement) {
     this.divId = Rhythm.createDivId();
+    this.indexInList = indexInList;
     this.metronome = metronome;
+    this.tempo = 120;
+
     this.addRhythmDivToPage(nextElement);
     this.watchTempo();
 
-    this.tempo = 120;
     this.timeSignature = new TimeSignature(this.getDiv.bind(this));
   }
 
@@ -43,7 +45,7 @@ class Rhythm {
     else
       this.tempo = this.tempoInput.value;  // Update the tempo.
 
-    this.metronome.tempoChanged();
+    this.metronome.tempoChanged(indexInList);
   }
 
   watchTempo() {
