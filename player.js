@@ -3,30 +3,34 @@ class Player {
   constructor(metronome) {
     this.metronome = metronome;
     this.duration = 0.02;
-    this.beat = -1;
+    this.currentTick = -1;
   }
 
   start() {
-    console.log('Start! ' + this.metronome.rhythm.toString());
+    console.log('Start! ' + this.rhythm.toString());
     this.tick();
-    this.interval = window.setInterval(this.tick.bind(this), this.metronome.rhythm.tickInterval);
+    this.interval = window.setInterval(this.tick.bind(this), this.rhythm.tickInterval);
   }
 
   stop() {
     console.log('Stop!');
     if (this.interval) window.clearInterval(this.interval);
     this.interval = null;
-    this.beat = -1;
+    this.currentTick = -1;
   }
 
   tick() {
     console.log('tick!');
-    this.beat = (this.beat + 1) % this.metronome.rhythm.timeSignature.top;
+    this.currentTick = (this.currentTick + 1) % this.rhythm.ticksPerMeasure;
 
     const oscillator = this.context.createOscillator();
     oscillator.type = 'triangle';
-    if (this.beat === 0 /*downbeat*/) oscillator.frequency.value = 2500;
+
+    const strength = this.rhythm.getStrengthForTick(this.currentTick);
+    if (strength === "downbeat") oscillator.frequency.value = 2500;
+    else if (strength === "beat") oscillator.frequency.value = 2000;
     else oscillator.frequency.value = 1500;
+
     oscillator.connect(this.context.destination);
     oscillator.start(this.context.currentTime);
     oscillator.stop(this.context.currentTime + this.duration);
@@ -37,4 +41,5 @@ class Player {
     if (!this.context_) this.context_ = new AudioContext();
     return this.context_;
   }
+  get rhythm() { return this.metronome.rhythm; }
 }
