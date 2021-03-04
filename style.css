@@ -1,6 +1,10 @@
-body > * {
+body > *, .rhythm > * {
   vertical-align: middle;
   margin: 5px;
+}
+
+.rhythm {
+  display: inline;
 }
 
 .time-signature {
