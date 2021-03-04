@@ -5,6 +5,8 @@ body > *, .rhythm > * {
 
 .rhythm {
   display: inline;
+  border: 1px solid black;
+  padding: 20px 5px;
 }
 
 .time-signature {

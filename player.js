@@ -47,5 +47,5 @@ class Player {
     if (!this.context_) this.context_ = new AudioContext();
     return this.context_;
   }
-  get rhythm() { return this.metronome.rhythm; }
+  get rhythm() { return this.metronome.rhythms[0]; }
 }

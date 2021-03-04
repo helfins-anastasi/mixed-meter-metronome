@@ -12,7 +12,7 @@ class Rhythm {
   addRhythmDivToPage(nextElement) {
     const template = document.getElementById('rhythm-template');
     const div = document.createElement('DIV');
-    div.appendChild(template.content);
+    div.appendChild(document.importNode(template.content, true));
     div.className = 'rhythm';
     div.id = this.divId;
 
