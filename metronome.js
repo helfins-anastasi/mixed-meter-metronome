@@ -25,8 +25,12 @@ class Metronome {
 
   updateCount() {
     // Remove non-numeric characters.
-    this.countInput.value = this.countInput.value.replace(/[^1-9]/g, '');
-    this.rhythm.count = this.countInput.value;
+    this.countInput.value = this.countInput.value.replace(/[^0-9]/g, '');
+    if (!this.countInput.value) {
+      this.countInput.value = this.rhythm.count;
+    } else {
+      this.rhythm.count = this.countInput.value;
+    }
   }
 
   get startButton() { return document.getElementById('start'); }
