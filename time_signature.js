@@ -7,6 +7,13 @@ class TimeSignature {
     this.watchInputs();
   }
 
+  getTicks(includeDivisions) {
+    if (this.isSimple())
+      return includeDivisions ? 2 * this.top : this.top;
+    if (this.isCompound())
+      return includeDivisions ? this.top : this.top / 3;
+  }
+
   isSimple() {
     return this.top <= 4;
   }
@@ -25,6 +32,8 @@ class TimeSignature {
   }
 
   update() {
+    const oldValIsCompound = this.isCompound();
+
     // Remove non-numeric characters.
     this.topInput.value = this.topInput.value.replace(/[^0-9]/g, '');
     if (this.topInput.value == 0)  // Yes this is intentionally == not ===
@@ -38,6 +47,8 @@ class TimeSignature {
       this.bottom = bottom;
     else
       this.bottomInput.value = this.bottom;
+
+    if (this.onchange) this.onchange(oldValIsCompound, this);
   }
 
   watchInputs() {

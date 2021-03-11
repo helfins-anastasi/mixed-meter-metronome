@@ -10,6 +10,9 @@ class Rhythm {
     this.watchTempo();
 
     this.timeSignature = new TimeSignature(this.getDiv.bind(this));
+    this.timeSignature.onchange = this.timeSignatureChanged.bind(this);
+
+    this.playBeatDivision = false;
   }
 
   addRhythmDivToPage(nextElement) {
@@ -29,10 +32,15 @@ class Rhythm {
   getStrengthForTick(tick) {
     if (tick === 0)
       return "downbeat";
-    if (this.timeSignature.isCompound())
-      return tick % 3 === 0 ? "beat" : "beat division";
-    else
+    if (!this.playBeatDivision)
       return "beat";
+    return tick % this.beatDivision === 0 ? "beat" : "beat division";
+  }
+
+  timeSignatureChanged(oldValIsCompound, newVal) {
+    if (!oldValIsCompound && newVal.isCompound()) {
+      this.beatDivisionCheckbox.checked = true;
+    }
   }
 
   toString() {
@@ -41,6 +49,7 @@ class Rhythm {
 
   updateTempo() {
     this.tempoUnit = this.tempoUnitDropdown.value;
+    this.playBeatDivision = this.beatDivisionCheckbox.checked;
 
     this.tempoInput.value = this.tempoInput.value.replace(/[^0-9]/g, '');
     if (this.tempoInput.value == 0 || this.tempoInput.value > 400)
@@ -52,13 +61,16 @@ class Rhythm {
   }
 
   watchTempo() {
+    this.beatDivisionCheckbox.onchange = this.updateTempo.bind(this);
     this.tempoInput.onchange = this.updateTempo.bind(this);
     this.tempoUnitDropdown.onchange = this.updateTempo.bind(this);
   }
 
+  get beatDivision() { return this.timeSignature.isCompound() ? 3 : 2; }
   get tempoInput() { return this.getDiv().getElementsByClassName('tempo')[0]; }
   get tempoUnitDropdown() { return this.getDiv().getElementsByClassName('tempo-unit')[0]; }
-  get ticksPerMeasure() { return this.timeSignature.top; }
+  get beatDivisionCheckbox() { return this.getDiv().getElementsByClassName('beat-division')[0]; }
+  get ticksPerMeasure() { return this.timeSignature.getTicks(this.playBeatDivision); }
   get tickInterval() {
     const measuresPerMinute = this.tempo * this.tempoUnit / (this.timeSignature.top / this.timeSignature.bottom); 
     const ticksPerMinute = measuresPerMinute * this.ticksPerMeasure;
